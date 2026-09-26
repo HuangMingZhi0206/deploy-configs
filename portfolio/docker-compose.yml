@@ -1,0 +1,39 @@
+services:
+  web:
+    # Follows the moving tag: every push to main rebuilds it, so deploying
+    # needs no edit here. To roll back, put a specific build here instead —
+    # ghcr.io/huangmingzhi0206/portfolioks:sha-abc1234 — and redeploy. The tag
+    # for any commit is printed in that commit's Actions run.
+    image: ghcr.io/huangmingzhi0206/portfolioks:latest
+    restart: unless-stopped
+    environment:
+      # Coolify fills this in from the domain set on the resource.
+      - SERVICE_FQDN_WEB_5000
+      # Set these in Coolify (Environment Variables on this resource):
+      # internal URL of the managed PostgreSQL resource
+      - DATABASE_URL=${DATABASE_URL}
+      # long random string used to sign admin JWTs (required)
+      - JWT_SECRET=${JWT_SECRET}
+      # Cloudinary media storage (required for admin uploads)
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      # Gmail app-password for contact-form notifications (optional)
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      # Seed credentials for a fresh database (optional; change after first login)
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - NODE_ENV=production
+    expose:
+      - "5000"
+    # The app already answers /api/health. Without this Coolify only knows the
+    # process is alive, not that it can serve — a container stuck on a dead
+    # database connection still counts as Up.
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      # Generous: the first request also runs the schema check against Postgres.
+      start_period: 30s
