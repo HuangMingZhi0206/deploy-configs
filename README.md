@@ -1,1 +1,1 @@
-# deplot-configs
+# deploy-configs
