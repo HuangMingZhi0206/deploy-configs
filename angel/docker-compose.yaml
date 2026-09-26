@@ -1,8 +1,13 @@
 services:
   web:
-    image: ghcr.io/huangmingzhi0206/angel_birthday_20th:v1.0.0
+    # Follows the moving tag: every push to master in angel_birthday_20th
+    # rebuilds it, so deploying needs no edit here. To roll back, put a
+    # specific build here instead —
+    # ghcr.io/huangmingzhi0206/angel_birthday_20th:sha-abc1234 — and redeploy.
+    image: ghcr.io/huangmingzhi0206/angel_birthday_20th:latest
     restart: unless-stopped
     environment:
+      # Coolify fills this in from the domain set on the resource.
       - SERVICE_FQDN_WEB_80
     expose:
       - "80"

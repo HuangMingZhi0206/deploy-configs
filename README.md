@@ -14,7 +14,7 @@ Nothing secret is in here. A compose file names an image, a port, and the
 |---|---|---|
 | `portfolio/` | Portofolio Kevin Syonin | GitHub Actions in `PortfolioKSVercel` |
 | `porto-angel/` | portfolio-aap-vercel | GitHub Actions in `portfolio-aap-vercel` |
-| `angel/` | angel_birthday_20th | still built by hand |
+| `angel/` | angel_birthday_20th | GitHub Actions in `angel_birthday_20th` (branch `master`) |
 
 ## Editing
 
