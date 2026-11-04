@@ -1,0 +1,13 @@
+services:
+  web:
+    # Follows the moving tag: every push to main rebuilds it, so deploying
+    # needs no edit here. To roll back, put a specific build here instead —
+    # ghcr.io/huangmingzhi0206/purchase-decision-engine:sha-<full-sha> — then
+    # Load compose and redeploy in Coolify.
+    image: ghcr.io/huangmingzhi0206/purchase-decision-engine:latest
+    restart: unless-stopped
+    environment:
+      # Coolify fills this in from the domain set on the resource.
+      - SERVICE_FQDN_WEB_80
+    expose:
+      - "80"
