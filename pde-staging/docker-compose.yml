@@ -1,0 +1,12 @@
+services:
+  web:
+    # Staging: follows the :staging tag, rebuilt on every push to the staging
+    # branch. To pin a build, use ghcr.io/huangmingzhi0206/purchase-decision-engine:sha-<short>
+    # then Load compose and redeploy in Coolify.
+    image: ghcr.io/huangmingzhi0206/purchase-decision-engine:staging
+    restart: unless-stopped
+    environment:
+      # Coolify fills this in from the domain set on the resource.
+      - SERVICE_FQDN_WEB_80
+    expose:
+      - "80"
