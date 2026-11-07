@@ -8,5 +8,21 @@ services:
     environment:
       # Coolify fills this in from the domain set on the resource.
       - SERVICE_FQDN_WEB_80
+      # nginx forwards /api/ here. The service name is unique per environment so staging
+      # never reaches the production API on the shared Docker network.
+      - API_UPSTREAM=http://pde-staging-api:3000
     expose:
       - "80"
+
+  pde-staging-api:
+    # Encrypted-backup API. Pinning: ...:api-sha-<short>.
+    image: ghcr.io/huangmingzhi0206/purchase-decision-engine:api-staging
+    restart: unless-stopped
+    environment:
+      # Set these in Coolify (Environment Variables on this resource); no values live in this public repo.
+      - DATABASE_URL=${DATABASE_URL}
+      - ACCESS_TEAM_DOMAIN=${ACCESS_TEAM_DOMAIN}
+      - ACCESS_AUD=${ACCESS_AUD}
+      - ALLOWED_EMAILS=${ALLOWED_EMAILS}
+    expose:
+      - "3000"
